@@ -88,7 +88,9 @@ def save_user_geolocation(request):
             config.consumer_key,
             config.consumer_secret))
 
-    results = twitter.trends.closest(lat = latitude,long=longitude)
+    results = twitter.trends.closest(lat = latitude, long=longitude)
+    results = twitter.trends.place(_id = results[0]['woeid'])
+    
     print("korea Trends")
     count= 0
     for location in results:
