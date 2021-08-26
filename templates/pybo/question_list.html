@@ -124,31 +124,5 @@ $(document).ready(function(){
         $("#searchForm").submit();
     });
 });
-function getLocation() {
-  if (navigator.geolocation) { 
-    navigator.geolocation.getCurrentPosition(function(position) {
-      alert(position.coords.latitude + ' ' + position.coords.longitude);
-      $.ajax({
-
-       type : 'POST',
-       url : 'getdata',
-       data : {
-
-           lat:position.coords.latitude,
-           long: position.coords.longitude
-         },
-        });
-    }, function(error) {
-      console.error(error);
-    }, {
-      enableHighAccuracy: false,
-      maximumAge: 0,
-      timeout: Infinity
-    });
-  } else {
-    alert('GPS를 지원하지 않습니다');
-  }
-}
-getLocation();
 </script>
 {% endblock %}

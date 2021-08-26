@@ -91,16 +91,14 @@ def save_user_geolocation(request):
     results = twitter.trends.closest(lat = latitude, long=longitude)
     results = twitter.trends.place(_id = results[0]['woeid'])
     
-    print("korea Trends")
-    count= 0
+    out= []
     for location in results:
+    
         for trend in location["trends"]:
-            count +=1
-            print(" - %s" % trend["name"])
+        
+            out.append({trend["name"]:1})
 
-    print(count)
-
-    return HttpResponse('')
+    return render(request, 'pybo/index.html',{'message': out})
 
 
 
