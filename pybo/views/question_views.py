@@ -96,7 +96,7 @@ def save_user_geolocation(request):
     
         for trend in location["trends"]:
         
-            out.append({trend["name"]:1})
+           out.append({ "tag":trend["name"], "count":1 })
 
     return render(request, 'pybo/index.html',{'message': out})
 
