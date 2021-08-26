@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-
+from django.http import HttpResponse
+import json
 
 from twitter import *
 
@@ -10,9 +11,10 @@ import requests
 #-----------------------------------------------------------------------
 # load our API credentials
 #-----------------------------------------------------------------------
-import sys
-sys.path.append(".")
-import config
+consumer_key = "tWSoKJjXG1huVc3a4AtoJdteK"
+consumer_secret = "3aOhU0QjVkG1f0Tm1raU6xEjMAy4SiU8KfAZszpomtiG52nCMd"  
+access_key = "1395637087836143619-PU6CIt82rK7ZoLBdZ8M13JYd7SXW40"
+access_secret = "gFhAQUf28Kw5nkfXhrLU7NKJE9GovrrLGvoWgFlPNzFcW"
 
 
 from ..forms import QuestionForm
@@ -77,30 +79,26 @@ def question_delete(request, question_id):
 
 def save_user_geolocation(request):
     if request.method == 'POST':
-        latitude = request.POST['lat']
-        longitude = request.POST['long']
-        UserGeoLocation.create(
-            latitude= latitude,
-            longitude = longitude,
-        )
-    twitter = Twitter(auth = OAuth(config.access_key,
-            config.access_secret,
-            config.consumer_key,
-            config.consumer_secret))
+        latitude_ = request.POST['lat']
+        longitude_ = request.POST['long']
+        
+        twitter = Twitter(auth = OAuth(access_key,
+                access_secret,
+                consumer_key,
+                consumer_secret))
 
-    results = twitter.trends.closest(lat = latitude, long=longitude)
-    results = twitter.trends.place(_id = results[0]['woeid'])
-    
-    print("korea Trends")
-    count= 0
-    for location in results:
-        for trend in location["trends"]:
-            count +=1
-            print(" - %s" % trend["name"])
-
-    print(count)
-
-    return HttpResponse('')
+        results = twitter.trends.closest(lat = latitude_, long=longitude_)
+        results = twitter.trends.place(_id = results[0]['woeid'])
+        
+        out= []
+        for location in results:
+            i=100000
+            for trend in location["trends"]:
+                i-=1000
+                out.append({ "tag":trend["name"], "count": i})
+        
+        return HttpResponse(json.dumps(out), content_type="application/json")
+      
 
 
 
