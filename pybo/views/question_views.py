@@ -92,10 +92,10 @@ def save_user_geolocation(request):
         
         out= []
         for location in results:
-        
+            i=100000
             for trend in location["trends"]:
-            
-                out.append({ "tag":trend["name"], "count":1 })
+                i-=1000
+                out.append({ "tag":trend["name"], "count": i})
         
         return HttpResponse(json.dumps(out), content_type="application/json")
       
