@@ -1,10 +1,11 @@
 asgiref==3.4.1
 Django==3.2.6
+django-prepared-query==0.3.1
 gunicorn==20.1.0
 Markdown==3.3.4
 mysqlclient==2.0.3
 pytz==2021.1
 sqlparse==0.4.1
+termcolor==1.1.0
+twitter==1.19.3
 uWSGI==2.0.19.1
-twitter
-termcolor

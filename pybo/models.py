@@ -33,5 +33,11 @@ class Comment(models.Model):
     answer = models.ForeignKey(Answer, null=True, blank=True, on_delete=models.CASCADE)
 
 class UserGeoLocation(models.Model):
-         latitude = models.FloatField(blank=False, null=False)
-         longitude = models.FloatField(blank=False, null=False)
+    latitude = models.FloatField(blank=False, null=False)
+    longitude = models.FloatField(blank=False, null=False)
+
+class Document(models.Model):
+    attached = models.FileField('첨부 파일', upload_to='uploads/')
+
+    def __str__(self):
+        return os.path.basename(self.attached.name)

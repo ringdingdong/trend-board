@@ -2,7 +2,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; ">
+    <meta http-equiv="Content-Security-Policy-Report-Only" content="default-src 'self'; script-src 'self'; style-src 'self'; ">
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,9 +25,5 @@
     <script src="{% static 'jquery-3.4.1.min.js' %}"></script>
     <!-- Bootstrap JS -->
     <script src="{% static 'bootstrap.min.js' %}"></script>
-    <!-- 자바스크립트 Start -->
-    {% block script %}
-    {% endblock %}
-    <!-- 자바스크립트 End -->
 </body>
 </html>

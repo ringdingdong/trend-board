@@ -130,8 +130,8 @@ function getLocation() {
       alert(position.coords.latitude + ' ' + position.coords.longitude);
       $.ajax({
 
-       type='POST',
-       url = 'getdata',
+       type : 'POST',
+       url : 'getdata',
        data : {
 
            lat:position.coords.latitude,

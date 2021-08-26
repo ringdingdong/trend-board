@@ -76,30 +76,29 @@ def question_delete(request, question_id):
 
 
 def save_user_geolocation(request):
+    if request.method == 'POST':
+        latitude = request.POST['lat']
+        longitude = request.POST['long']
+        UserGeoLocation.create(
+            latitude= latitude,
+            longitude = longitude,
+        )
+    twitter = Twitter(auth = OAuth(config.access_key,
+            config.access_secret,
+            config.consumer_key,
+            config.consumer_secret))
 
-         if request.method == 'POST':
-             latitude = request.POST['lat']
-             longitude = request.POST['long']
-             UserGeoLocation.create(
-                  latitude= latitude,
-                  longitude = longitude,
-              )
-            twitter = Twitter(auth = OAuth(config.access_key,
-                  config.access_secret,
-                  config.consumer_key,
-                  config.consumer_secret))
+    results = twitter.trends.closest(lat = latitude,long=longitude)
+    print("korea Trends")
+    count= 0
+    for location in results:
+        for trend in location["trends"]:
+            count +=1
+            print(" - %s" % trend["name"])
 
-            results = twitter.trends.closest(lat = latitude,long=longitude)
-            print("korea Trends")
-            count= 0
-            for location in results:
-                for trend in location["trends"]:
-                    count +=1
-                    print(" - %s" % trend["name"])
+    print(count)
 
-            print(count)
-
-            return HttpResponse('')
+    return HttpResponse('')
 
 
 
