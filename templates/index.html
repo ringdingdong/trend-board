@@ -36,6 +36,8 @@
 <script src="https://cdn.amcharts.com/lib/4/plugins/wordCloud.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
+
+
 <!-- Chart code -->
 <script>
 am4core.ready(function() {
@@ -43,6 +45,7 @@ am4core.ready(function() {
 // Themes begin
 am4core.useTheme(am4themes_animated);
 // Themes end
+
 
 var chart = am4core.create("chartdiv", am4plugins_wordCloud.WordCloud);
 chart.fontFamily = "Courier New";
@@ -52,15 +55,18 @@ series.rotationThreshold = 0.5;
 function getLocation() {
   if (navigator.geolocation) { 
     navigator.geolocation.getCurrentPosition(function(position) {
-      alert(position.coords.latitude + ' ' + position.coords.longitude);
+      //alert(position.coords.latitude + ' ' + position.coords.longitude);
       $.ajax({
-
+       headers: { "X-CSRFToken": '{{csrf_token}}' },
        type : 'POST',
-       url : 'getdata',
+       url : '/pybo/getdata',
        data : {
-
-           lat:position.coords.latitude,
+           lat: position.coords.latitude,
            long: position.coords.longitude
+         },
+         success: function(response) {
+                
+            series.data =response;
          },
         });
     }, function(error) {
@@ -70,12 +76,10 @@ function getLocation() {
       maximumAge: 0,
       timeout: Infinity
     });
-  } else {
-    alert('GPS를 지원하지 않습니다');
-  }
+  } 
 }
 getLocation();
-series.data = <div>{{message}}</div> ;
+
 
 series.dataFields.word = "tag";
 series.dataFields.value = "count";
