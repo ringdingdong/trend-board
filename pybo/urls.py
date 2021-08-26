@@ -1,13 +1,13 @@
 from django.urls import path
 
-from .views import base_views, question_views, answer_views, comment_views, vote_views
+from .views import base_views, board_views, question_views, answer_views, comment_views, vote_views
 
 app_name = 'pybo'
 
 urlpatterns = [
-    # base_views.py
-    path('/home/swcontest/trend-board', base_views.index, name='index'),
-    path('<int:question_id>/', base_views.detail, name='detail'),
+    # board_views.py
+    path('', board_views.board, name='board'),
+    path('<int:question_id>/', board_views.detail, name='detail'),
 
     # question_views.py
     path('question/create/', question_views.question_create, name='question_create'),
