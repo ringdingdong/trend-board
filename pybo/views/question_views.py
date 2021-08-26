@@ -3,6 +3,18 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
+
+from twitter import *
+
+import requests
+#-----------------------------------------------------------------------
+# load our API credentials
+#-----------------------------------------------------------------------
+import sys
+sys.path.append(".")
+import config
+
+
 from ..forms import QuestionForm
 from ..models import Question
 
@@ -69,10 +81,25 @@ def save_user_geolocation(request):
              latitude = request.POST['lat']
              longitude = request.POST['long']
              UserGeoLocation.create(
-                  user = request.user
                   latitude= latitude,
                   longitude = longitude,
-
-
               )
+            twitter = Twitter(auth = OAuth(config.access_key,
+                  config.access_secret,
+                  config.consumer_key,
+                  config.consumer_secret))
+
+            results = twitter.trends.closest(lat = latitude,long=longitude)
+            print("korea Trends")
+            count= 0
+            for location in results:
+                for trend in location["trends"]:
+                    count +=1
+                    print(" - %s" % trend["name"])
+
+            print(count)
+
             return HttpResponse('')
+
+
+
