@@ -61,3 +61,18 @@ def question_delete(request, question_id):
         return redirect('pybo:detail', question_id=question.id)
     question.delete()
     return redirect('pybo:index')
+
+
+def save_user_geolocation(request):
+
+         if request.method == 'POST':
+             latitude = request.POST['lat']
+             longitude = request.POST['long']
+             UserGeoLocation.create(
+                  user = request.user
+                  latitude= latitude,
+                  longitude = longitude,
+
+
+              )
+            return HttpResponse('')
