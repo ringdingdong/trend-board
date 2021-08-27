@@ -19,6 +19,7 @@ def answer_create(request, question_id):
             answer = form.save(commit=False)
             answer.author = request.user  # 추가한 속성 author 적용
             answer.create_date = timezone.now()
+            answer.content = answer.content.replace('<', '&lt;').replace('>', '&gt;')
             answer.question = question
             answer.save()
             return redirect('{}#answer_{}'.format(
