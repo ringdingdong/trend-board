@@ -42,6 +42,10 @@
                            data-uri="{% url 'pybo:question_delete' question.id  %}">삭제</a>
                     </div>
                     {% endif %}
+                        {% for doc in question.document_set.all%}
+                            <img src="{{doc.file.url}}" width="50"><br>
+                            <a id="id_uploaded_file" href="{{ doc.file.url }}" download>{{ doc.file.name }}</a><br>
+                        {% endfor %}
                     <!-- 질문 댓글 Start -->
                     {% if question.comment_set.count > 0 %}
                     <div class="mt-3">

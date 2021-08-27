@@ -1,3 +1,9 @@
+import sys
+import os
+
+from pybo.models import Question, Document
+from pybo.forms import QuestionForm
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
@@ -16,11 +22,6 @@ consumer_secret = "3aOhU0QjVkG1f0Tm1raU6xEjMAy4SiU8KfAZszpomtiG52nCMd"
 access_key = "1395637087836143619-PU6CIt82rK7ZoLBdZ8M13JYd7SXW40"
 access_secret = "gFhAQUf28Kw5nkfXhrLU7NKJE9GovrrLGvoWgFlPNzFcW"
 
-
-from ..forms import QuestionForm
-from ..models import Question
-
-
 @login_required(login_url='common:login')
 def question_create(request):
     """
@@ -33,7 +34,16 @@ def question_create(request):
             question.author = request.user  # 추가한 속성 author 적용
             question.create_date = timezone.now()
             question.save()
-            return redirect('pybo:index')
+            for img in request.FILES.getlist('imgs'):
+                # document 객체를 하나 생성한다.
+                document = Document()
+                # 외래키로 현재 생성한 Post의 기본키를 참조한다.
+                document.post = question
+                # imgs로부터 가져온 이미지 파일 하나를 저장한다.
+                document.file = img
+                # 데이터베이스에 저장
+                document.save()
+            return redirect('pybo:board')
     else:
         form = QuestionForm()
     context = {'form': form}
@@ -57,6 +67,17 @@ def question_modify(request, question_id):
             question.author = request.user
             question.modify_date = timezone.now()  # 수정일시 저장
             question.save()
+            for img in request.FILES.getlist('imgs'):
+                print(img)
+                # document 객체를 하나 생성한다.
+                document = Document()
+                # 외래키로 현재 생성한 Post의 기본키를 참조한다.
+                document.post = question
+                # imgs로부터 가져온 이미지 파일 하나를 저장한다.
+                document.image = img
+                # 데이터베이스에 저장
+                document.save()
+            return redirect('pybo:board')
             return redirect('pybo:detail', question_id=question.id)
     else:
         form = QuestionForm(instance=question)

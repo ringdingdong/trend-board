@@ -2,6 +2,14 @@ from django.contrib.auth.models import User
 from django.db import models
 from django_prepared_query import PreparedManager
 
+from uuid import uuid4
+from datetime import datetime
+import os
+
+def get_file_path(instance, filename):
+    ymd_path = datetime.now().strftime('%Y/%m/%d')
+    uuid_name = uuid4().hex
+    return '/'.join(['uploads/', ymd_path, uuid_name])
 
 class Question(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_question')
@@ -14,6 +22,12 @@ class Question(models.Model):
     def __str__(self):
         return self.subject
 
+class Document(models.Model):
+    post = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
+    file = models.ImageField(upload_to='images/',blank=True, null=True)
+    
+    def __str__(self):
+        return os.path.basename(self.file.name)
 
 class Answer(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_answer')
@@ -35,9 +49,3 @@ class Comment(models.Model):
 class UserGeoLocation(models.Model):
     latitude = models.FloatField(blank=False, null=False)
     longitude = models.FloatField(blank=False, null=False)
-
-class Document(models.Model):
-    attached = models.FileField('첨부 파일', upload_to='uploads/')
-
-    def __str__(self):
-        return os.path.basename(self.attached.name)
