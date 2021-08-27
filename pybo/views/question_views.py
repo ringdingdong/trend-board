@@ -33,6 +33,7 @@ def question_create(request):
             question = form.save(commit=False)
             question.author = request.user  # 추가한 속성 author 적용
             question.create_date = timezone.now()
+            question.content = question.content.replace('<', '&lt;').replace('>', '&gt;')
             question.save()
             for img in request.FILES.getlist('imgs'):
                 # document 객체를 하나 생성한다.
