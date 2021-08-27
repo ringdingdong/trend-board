@@ -19,6 +19,7 @@ def comment_create_question(request, question_id):
             comment = form.save(commit=False)
             comment.author = request.user
             comment.create_date = timezone.now()
+            comment.content = comment.content.replace('<', '&lt;').replace('>', '&gt;')
             comment.question = question
             comment.save()
             return redirect('{}#comment_{}'.format(
